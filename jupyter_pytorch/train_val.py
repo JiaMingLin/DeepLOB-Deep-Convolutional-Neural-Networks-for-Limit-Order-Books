@@ -33,16 +33,12 @@ def train(model, criterion, optimizer, train_loader, test_loader, epochs):
     
         model.eval()
         test_loss = []
-        all_targets = []
-        all_predictions = []
         for inputs, targets in test_loader:
             inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)      
             outputs = model(inputs)
             _, predictions = torch.max(outputs, 1)
             loss = criterion(outputs, targets)
             test_loss.append(loss.item())
-            all_targets.append(targets.cpu().numpy())
-            all_predictions.append(predictions.cpu().numpy())
         test_loss = np.mean(test_loss)
 
         # Save losses
@@ -58,7 +54,27 @@ def train(model, criterion, optimizer, train_loader, test_loader, epochs):
         dt = datetime.now() - t0
         print(f'Epoch {it+1}/{epochs}, Train Loss: {train_loss:.4f}, \
           Validation Loss: {test_loss:.4f}, Duration: {dt}, Best Val Epoch: {best_test_epoch}')
-        print('accuracy_score:', accuracy_score(all_targets, all_predictions))
-        print(classification_report(all_targets, all_predictions, digits=4))
 
     return train_losses, test_losses
+
+def test_model(model, test_loader):
+    model.eval()
+    all_targets = []
+    all_predictions = []
+
+    for inputs, targets in test_loader:
+        # Move to GPU
+        inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)
+
+        # Forward pass
+        outputs = model(inputs)
+    
+        # Get prediction
+        # torch.max returns both max and argmax
+        _, predictions = torch.max(outputs, 1)
+
+        all_targets.append(targets.cpu().numpy())
+        all_predictions.append(predictions.cpu().numpy())
+
+    all_targets = np.concatenate(all_targets)    
+    all_predictions = np.concatenate(all_predictions)   
