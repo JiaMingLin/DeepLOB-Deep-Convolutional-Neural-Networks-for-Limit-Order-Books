@@ -78,3 +78,5 @@ def test_model(model, test_loader):
 
     all_targets = np.concatenate(all_targets)    
     all_predictions = np.concatenate(all_predictions)   
+    print('accuracy_score:', accuracy_score(all_targets, all_predictions))
+    print(classification_report(all_targets, all_predictions, digits=4))
