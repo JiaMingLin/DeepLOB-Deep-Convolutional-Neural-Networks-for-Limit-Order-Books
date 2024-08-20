@@ -1,17 +1,17 @@
 from common import *
-def train(model, criterion, optimizer, train_loader, test_loader, epochs):
+def train(model, criterion, optimizer, train_loader, test_loader, epochs, exp_name):
     
     train_losses = np.zeros(epochs)
     test_losses = np.zeros(epochs)
     best_test_loss = np.inf
     best_test_epoch = 0
 
-    for it in tqdm(range(epochs)):
+    for it in range(epochs):
         
         model.train()
         t0 = datetime.now()
         train_loss = []
-        for inputs, targets in train_loader:
+        for inputs, targets in tqdm(train_loader):
             # move data to GPU
             inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)
             # print("inputs.shape:", inputs.shape)
@@ -34,7 +34,8 @@ def train(model, criterion, optimizer, train_loader, test_loader, epochs):
     
         model.eval()
         test_loss = []
-        for inputs, targets in test_loader:
+        print("Validation...")
+        for inputs, targets in tqdm(test_loader):
             inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)      
             outputs = model(inputs.squeeze())
 
@@ -47,7 +48,7 @@ def train(model, criterion, optimizer, train_loader, test_loader, epochs):
         test_losses[it] = test_loss
         
         if test_loss < best_test_loss:
-            torch.save(model, './best_val_model_pytorch')
+            torch.save(model, f'./best_val_model_{exp_name}')
             best_test_loss = test_loss
             best_test_epoch = it
             print('model saved')
@@ -68,7 +69,7 @@ def test_model(model, test_loader):
         inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)
 
         # Forward pass
-        outputs = model(inputs)
+        outputs = model(inputs.squeeze())
     
         # Get prediction
         # torch.max returns both max and argmax

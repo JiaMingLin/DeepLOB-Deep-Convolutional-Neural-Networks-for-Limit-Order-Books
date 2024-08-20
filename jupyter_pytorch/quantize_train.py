@@ -27,7 +27,7 @@ def main(exp_setting):
 
     batch_size = 64
 
-    # exp_name = settings['exp_name']
+    exp_name = settings['exp_name']
     # learning_rate = setting['learning_rate']
     
 
@@ -74,7 +74,7 @@ def main(exp_setting):
     train_losses, val_losses = train(model, criterion, optimizer, 
                                         train_loader, val_loader, epochs=50)
 
-    model = torch.load('best_val_model_pytorch')
+    model = torch.load(f'best_val_model_{exp_name}')
 
     test_model(model, test_loader)
 

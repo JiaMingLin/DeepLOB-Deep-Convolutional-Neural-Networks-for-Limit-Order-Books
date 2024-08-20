@@ -6,7 +6,7 @@ learning_rate: 0.001
 quant: True
 no_brevitas: False
 w_bit: 8
-acc_bit: 8
+acc_bit: 16
 a_bit: 8
 i_bit: 8
 o_bit: 8
