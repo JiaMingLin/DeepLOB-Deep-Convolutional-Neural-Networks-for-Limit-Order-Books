@@ -48,7 +48,7 @@ def train(model, criterion, optimizer, train_loader, test_loader, exp_name, epoc
         test_losses[it] = test_loss
         
         if test_loss < best_test_loss:
-            torch.save(model, f'./best_val_model_{exp_name}')
+            torch.save(model.state_dict(), f'./best_val_model_{exp_name}')
             best_test_loss = test_loss
             best_test_epoch = it
             print('model saved')
