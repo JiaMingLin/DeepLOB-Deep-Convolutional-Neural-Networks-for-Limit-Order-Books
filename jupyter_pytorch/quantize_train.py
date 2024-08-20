@@ -3,6 +3,7 @@ from dataset import Dataset
 from model import deeplob
 from train_val import *
 from opts import parser
+from model import lob_model
 # from sklearn.model_selection import train_test_split
 # X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.33)
 # N, D = X_train.shape
@@ -26,8 +27,8 @@ def main(exp_setting):
 
     batch_size = 64
 
-    exp_name = settings['exp_name']
-    learning_rate = setting['learning_rate']
+    # exp_name = settings['exp_name']
+    # learning_rate = setting['learning_rate']
     
 
     dataset_train = Dataset(data=dec_train, k=4, num_classes=3, T=100)
@@ -42,13 +43,27 @@ def main(exp_setting):
 
     tmp_loader = torch.utils.data.DataLoader(dataset=dataset_train, batch_size=1, shuffle=True)
 
+    # quantization
+    quant = settings['quant']
+    # qat = settings['qat']
+    fp_model = settings.get('fp_model', None)
+    w_bit = settings['w_bit']
+    acc_bit = settings['acc_bit']
+    a_bit = settings['a_bit']
+    i_bit = settings['i_bit']
+    o_bit = settings['o_bit']
+    r_bit = settings['r_bit']
+    no_brevitas = settings['no_brevitas']
+
     for x, y in tmp_loader:
         print(x)
         print(y)
         print(x.shape, y.shape)
         break
 
-    model = deeplob(y_len = dataset_train.num_classes)
+    model = lob_model('lob_lstm', 
+                      quant = quant, w_bit = w_bit, acc_bit = acc_bit, i_bit = i_bit, 
+                      o_bit = o_bit, r_bit = r_bit)
     model.to(device)
 
     summary(model, (1, 1, 100, 40))

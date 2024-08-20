@@ -19,7 +19,8 @@ def train(model, criterion, optimizer, train_loader, test_loader, epochs):
             optimizer.zero_grad()
             # Forward pass
             # print("about to get model output")
-            outputs = model(inputs)
+            # print(inputs.shape) torch.Size([64, 1, 100, 40])
+            outputs = model(inputs.squeeze())
             # print("done getting model output")
             # print("outputs.shape:", outputs.shape, "targets.shape:", targets.shape)
             loss = criterion(outputs, targets)
@@ -35,7 +36,7 @@ def train(model, criterion, optimizer, train_loader, test_loader, epochs):
         test_loss = []
         for inputs, targets in test_loader:
             inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)      
-            outputs = model(inputs)
+            outputs = model(inputs.squeeze())
 
             loss = criterion(outputs, targets)
             test_loss.append(loss.item())

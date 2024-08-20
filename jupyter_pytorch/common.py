@@ -30,6 +30,10 @@ from brevitas.quant.solver import WeightQuantSolver
 from brevitas.inject import ExtendedInjector
 from brevitas.quant.base import *
 
+from brevitas.quant.scaled_int import Int8WeightPerTensorFloat, \
+    Int8ActPerTensorFloat, \
+    Uint8ActPerTensorFloat
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
 
@@ -62,51 +66,44 @@ class CommonActQuant(CommonQuant, ActQuantSolver):
     max_val = 1.0
 
 
-class PerTensorFloatScaling4bit(ExtendedInjector):
-    """
-    """
-    scaling_per_output_channel = False
-    restrict_scaling_type = RestrictValueType.FP
-    bit_width = 4
+class CommonWeightQuant(CommonQuant, WeightQuantSolver):
+    scaling_const = 1.0
 
-class Int4WeightPerTensorFloat(NarrowIntQuant,
-                               MaxStatsScaling,
-                               PerTensorFloatScaling4bit,
-                               WeightQuantSolver):
-    """
-    4-bit narrow per-tensor signed int weight quantizer with per-tensor floating-point scale factor computed
-    from backpropagated statistics of the weight tensor.
 
-    Examples:
-        >>> from brevitas.nn import QuantLinear
-        >>> fc = QuantLinear(10, 5, bias=False, weight_quant=Int4WeightPerTensorFloat)
-    """
-    pass
+class CommonActQuant(CommonQuant, ActQuantSolver):
+    min_val = -1.0
+    max_val = 1.0
 
-class Int4ActPerTensorFloat(IntQuant,
-                            ParamFromRuntimePercentileScaling,
-                            PerTensorFloatScaling4bit,
-                            ActQuantSolver):
-    """
-    4-bit per-tensor signed int activations quantizer with learned floating-point scale factor
-    initialized from runtime statistics.
+class Int2WeightPerTensorFloat(Int8WeightPerTensorFloat):
+    bit_width=2
 
-    Examples:
-        >>> from brevitas.nn import QuantIdentity
-        >>> act = QuantIdentity(act_quant=Int4ActPerTensorFloat)
-    """
-    pass
+class Int2ActPerTensorFloat(Int8ActPerTensorFloat):
+    bit_width=2
 
-class Uint4ActPerTensorFloat(UintQuant,
-                             ParamFromRuntimePercentileScaling,
-                             PerTensorFloatScaling4bit,
-                             ActQuantSolver):
-    """
-    4-bit per-tensor unsigned int activations quantizer with learned floating-point scale factor
-    initialized from runtime statistics.
+class Uint2ActPerTensorFloat(Uint8ActPerTensorFloat):
+    bit_width=2
 
-    Examples:
-        >>> from brevitas.nn import QuantReLU
-        >>> act = QuantReLU(act_quant=Uint4ActPerTensorFloat)
-    """
-    pass
+class Int4WeightPerTensorFloat(Int8WeightPerTensorFloat):
+    bit_width=4
+
+class Int4ActPerTensorFloat(Int8ActPerTensorFloat):
+    bit_width=4
+
+class Uint4ActPerTensorFloat(Uint8ActPerTensorFloat):
+    bit_width=4
+
+class Int16ActPerTensorFloat(Int8ActPerTensorFloat):
+    bit_width=16
+
+weight_quantizer = {'int8': Int8WeightPerTensorFloat,
+                    'int4': Int4WeightPerTensorFloat,
+                    'int2': Int2WeightPerTensorFloat}
+
+act_quantizer = {
+                'int16': Int16ActPerTensorFloat,
+                'int8': Int8ActPerTensorFloat,
+                'uint8': Uint8ActPerTensorFloat,
+                'int4': Int4ActPerTensorFloat,
+                'uint4': Uint4ActPerTensorFloat,
+                'int2': Int2ActPerTensorFloat,
+                'uint2': Uint2ActPerTensorFloat}

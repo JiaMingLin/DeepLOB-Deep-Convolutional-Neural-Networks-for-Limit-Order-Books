@@ -3,11 +3,7 @@ from common import *
 
 from brevitas.nn import QuantLinear
 from brevitas.nn import QuantLSTM
-from brevitas.quant.scaled_int import Int8WeightPerTensorFloat, \
-    Int8ActPerTensorFloat, \
-    Uint8ActPerTensorFloat
-from brevitas.quant.ternary import SignedTernaryWeightPerTensorConst, SignedTernaryActPerTensorConst
-from brevitas.quant import *
+
 
 class deeplob(nn.Module):
     def __init__(self, y_len):
@@ -104,25 +100,6 @@ class deeplob(nn.Module):
         
         return forecast_y
 
-class Int2WeightPerTensorFloat(Int8WeightPerTensorFloat):
-    bit_width=2
-
-class Int2ActPerTensorFloat(Int8ActPerTensorFloat):
-    bit_width=2
-
-class Uint2ActPerTensorFloat(Uint8ActPerTensorFloat):
-    bit_width=2
-
-weight_quantizer = {'int8': Int8WeightPerTensorFloat,
-                    'int4': Int4WeightPerTensorFloat,
-                    'int2': Int2WeightPerTensorFloat}
-
-act_quantizer = {'int8': Int8ActPerTensorFloat,
-                 'uint8': Uint8ActPerTensorFloat,
-                    'int4': Int4ActPerTensorFloat,
-                    'uint4': Uint4ActPerTensorFloat,
-                    'int2': Int2ActPerTensorFloat,
-                    'uint2': Uint2ActPerTensorFloat}
 class LOB_LSTM(nn.Module):
     def __init__(self, input_size=40, hidden_size=64, num_layers=1, output_size=3,
                 quant = False, w_bit=8, acc_bit=16, a_bit=8, i_bit=8, o_bit=8, r_bit=8,
