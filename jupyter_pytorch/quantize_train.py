@@ -72,7 +72,7 @@ def main(exp_setting):
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
 
     train_losses, val_losses = train(model, criterion, optimizer, 
-                                        train_loader, val_loader, epochs=50)
+                                        train_loader, val_loader, exp_name, epochs=50)
 
     model = torch.load(f'best_val_model_{exp_name}')
 

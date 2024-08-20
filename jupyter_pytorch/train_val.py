@@ -1,5 +1,5 @@
 from common import *
-def train(model, criterion, optimizer, train_loader, test_loader, epochs, exp_name):
+def train(model, criterion, optimizer, train_loader, test_loader, exp_name, epochs):
     
     train_losses = np.zeros(epochs)
     test_losses = np.zeros(epochs)
