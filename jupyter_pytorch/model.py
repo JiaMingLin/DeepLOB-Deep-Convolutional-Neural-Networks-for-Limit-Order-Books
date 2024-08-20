@@ -171,10 +171,15 @@ class LOB_LSTM(nn.Module):
         out = self.fc(outputs)
         return out
 
-def lob_model(model_name, quant=False, w_bit=8, acc_bit=16, a_bit=8, i_bit=8, o_bit=8, r_bit=8, no_brevitas=False):
+def lob_model(model_name, 
+              quant=False, 
+              w_bit=8, acc_bit=16, a_bit=8, i_bit=8, o_bit=8, r_bit=8, 
+              no_brevitas=False):
     if model_name == 'deeplob':
         return deeplob(3)
     elif model_name == 'lob_lstm':
-        return LOB_LSTM(40, 64, 1, 3, quant, w_bit, acc_bit, a_bit, i_bit, o_bit, r_bit, no_brevitas)
+        return LOB_LSTM(40, 64, 1, 3, 
+                        quant, w_bit, acc_bit, a_bit, i_bit, o_bit, r_bit, 
+                        no_brevitas)
     else:
         raise ValueError('Model not found')
