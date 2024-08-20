@@ -28,7 +28,8 @@ def main(exp_setting):
     batch_size = 64
 
     exp_name = settings['exp_name']
-    # learning_rate = setting['learning_rate']
+    learning_rate = setting['learning_rate']
+    epochs = settings['epochs']
     
 
     dataset_train = Dataset(data=dec_train, k=4, num_classes=3, T=100)
@@ -69,10 +70,10 @@ def main(exp_setting):
     summary(model, (1, 1, 100, 40))
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     train_losses, val_losses = train(model, criterion, optimizer, 
-                                        train_loader, val_loader, exp_name, epochs=50)
+                                        train_loader, val_loader, exp_name, epochs=epochs)
 
     model = torch.load(f'best_val_model_{exp_name}')
 
