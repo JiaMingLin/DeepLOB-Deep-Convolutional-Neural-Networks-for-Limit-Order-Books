@@ -28,7 +28,7 @@ def main(exp_setting):
     batch_size = 64
 
     exp_name = settings['exp_name']
-    learning_rate = setting['learning_rate']
+    learning_rate = settings['learning_rate']
     epochs = settings['epochs']
     
 
