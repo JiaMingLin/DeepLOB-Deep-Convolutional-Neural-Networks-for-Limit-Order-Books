@@ -7,3 +7,9 @@
 .DS_Store
 data/*
 data/
+*.pyc
+report/
+report/*
+*.txt
+saved_model/*
+saved_model/

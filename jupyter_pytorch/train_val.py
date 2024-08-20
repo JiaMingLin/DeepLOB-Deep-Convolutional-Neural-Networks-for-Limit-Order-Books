@@ -36,7 +36,7 @@ def train(model, criterion, optimizer, train_loader, test_loader, epochs):
         for inputs, targets in test_loader:
             inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)      
             outputs = model(inputs)
-            _, predictions = torch.max(outputs, 1)
+
             loss = criterion(outputs, targets)
             test_loss.append(loss.item())
         test_loss = np.mean(test_loss)
