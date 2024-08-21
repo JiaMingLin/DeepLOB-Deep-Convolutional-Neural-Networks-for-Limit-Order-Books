@@ -1,5 +1,5 @@
 from common import *
-def train(model, criterion, optimizer, train_loader, test_loader, exp_name, epochs):
+def train(model, criterion, optimizer, train_loader, val_loader, exp_name, epochs):
     
     train_losses = np.zeros(epochs)
     test_losses = np.zeros(epochs)
@@ -7,7 +7,7 @@ def train(model, criterion, optimizer, train_loader, test_loader, exp_name, epoc
     best_test_epoch = 0
 
     for it in range(epochs):
-        
+        print(f"Traning... Epoch:{it+1}/{epochs}")
         model.train()
         t0 = datetime.now()
         train_loss = []
@@ -31,17 +31,9 @@ def train(model, criterion, optimizer, train_loader, test_loader, exp_name, epoc
             train_loss.append(loss.item())
         # Get train loss and test loss
         train_loss = np.mean(train_loss) # a little misleading
-    
-        model.eval()
-        test_loss = []
-        print("Validation...")
-        for inputs, targets in tqdm(test_loader):
-            inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)      
-            outputs = model(inputs.squeeze())
 
-            loss = criterion(outputs, targets)
-            test_loss.append(loss.item())
-        test_loss = np.mean(test_loss)
+        print("Validation...")        
+        test_loss = test_model(model, criterion, val_loader)
 
         # Save losses
         train_losses[it] = train_loss
@@ -59,17 +51,21 @@ def train(model, criterion, optimizer, train_loader, test_loader, exp_name, epoc
 
     return train_losses, test_losses
 
-def test_model(model, test_loader):
+def test_model(model,criterion, test_loader):
     model.eval()
     all_targets = []
     all_predictions = []
+    test_loss = []
 
-    for inputs, targets in test_loader:
+    for inputs, targets in tqdm(test_loader):
         # Move to GPU
         inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)
 
         # Forward pass
         outputs = model(inputs.squeeze())
+
+        loss = criterion(outputs, targets)
+        test_loss.append(loss.item())
     
         # Get prediction
         # torch.max returns both max and argmax
@@ -78,7 +74,10 @@ def test_model(model, test_loader):
         all_targets.append(targets.cpu().numpy())
         all_predictions.append(predictions.cpu().numpy())
 
+    test_loss = np.mean(test_loss)
     all_targets = np.concatenate(all_targets)    
     all_predictions = np.concatenate(all_predictions)   
     print('accuracy_score:', accuracy_score(all_targets, all_predictions))
     print(classification_report(all_targets, all_predictions, digits=4))
+
+    return test_loss

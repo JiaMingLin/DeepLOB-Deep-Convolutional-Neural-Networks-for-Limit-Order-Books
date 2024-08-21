@@ -4,6 +4,8 @@ from model import deeplob
 from train_val import *
 from opts import parser
 from model import lob_model
+from brevitas import config
+    
 # from sklearn.model_selection import train_test_split
 # X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.33)
 # N, D = X_train.shape
@@ -19,6 +21,7 @@ dec_test1 = np.loadtxt('../data/Test_Dst_NoAuction_DecPre_CF_7.txt')
 dec_test2 = np.loadtxt('../data/Test_Dst_NoAuction_DecPre_CF_8.txt')
 dec_test3 = np.loadtxt('../data/Test_Dst_NoAuction_DecPre_CF_9.txt')
 dec_test = np.hstack((dec_test1, dec_test2, dec_test3))
+# dec_test = dec_test[:, :int(np.floor(dec_test.shape[1] * 0.01))]
 print(dec_train.shape, dec_val.shape, dec_test.shape)
 
 def main(exp_setting):
@@ -75,9 +78,11 @@ def main(exp_setting):
     train_losses, val_losses = train(model, criterion, optimizer, 
                                         train_loader, val_loader, exp_name, epochs=epochs)
 
-    model = torch.load(f'best_val_model_{exp_name}')
+    config.IGNORE_MISSING_KEYS = True
+    model.load_state_dict(torch.load(f'best_val_model_{exp_name}'))
+    model.to(device)
 
-    test_model(model, test_loader)
+    test_model(model, criterion, test_loader)
 
 if __name__ == "__main__":
 
