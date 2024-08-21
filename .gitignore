@@ -13,3 +13,6 @@ report/*
 *.txt
 saved_model/*
 saved_model/
+exp_cases/*
+exp_cases/
+*.pt

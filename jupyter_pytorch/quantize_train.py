@@ -79,7 +79,7 @@ def main(exp_setting):
                                         train_loader, val_loader, exp_name, epochs=epochs)
 
     config.IGNORE_MISSING_KEYS = True
-    model.load_state_dict(torch.load(f'best_val_model_{exp_name}'))
+    model.load_state_dict(torch.load(f'best_val_model_{exp_name}.pt'))
     model.to(device)
 
     test_model(model, criterion, test_loader)
