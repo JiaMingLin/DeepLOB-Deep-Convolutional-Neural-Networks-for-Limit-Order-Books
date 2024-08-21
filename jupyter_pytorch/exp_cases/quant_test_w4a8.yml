@@ -1,0 +1,14 @@
+exp_name: w4a8
+
+learning_rate: 0.001
+epochs: 10
+
+#quantization
+quant: True
+no_brevitas: False
+w_bit: 4
+acc_bit: 16
+a_bit: 8
+i_bit: 8
+o_bit: 8
+r_bit: 8
