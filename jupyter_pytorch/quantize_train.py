@@ -49,6 +49,7 @@ def main(exp_setting):
 
     # quantization
     quant = settings['quant']
+    quant_type = settings['quant_type']
     # qat = settings['qat']
     fp_model = settings.get('fp_model', None)
     w_bit = settings['w_bit']
@@ -66,7 +67,7 @@ def main(exp_setting):
         break
 
     model = lob_model('lob_lstm', 
-                      quant = quant, w_bit = w_bit, acc_bit = acc_bit, i_bit = i_bit, 
+                      quant = quant, quant_type=quant_type, w_bit = w_bit, acc_bit = acc_bit, i_bit = i_bit, 
                       o_bit = o_bit, r_bit = r_bit)
     model.to(device)
 

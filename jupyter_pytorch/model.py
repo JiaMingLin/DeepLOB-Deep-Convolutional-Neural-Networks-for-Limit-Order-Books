@@ -102,7 +102,7 @@ class deeplob(nn.Module):
 
 class LOB_LSTM(nn.Module):
     def __init__(self, input_size=40, hidden_size=64, num_layers=1, output_size=3,
-                quant = False, w_bit=8, acc_bit=16, a_bit=8, i_bit=8, o_bit=8, r_bit=8,
+                quant = False, quant_type='int', w_bit=8, acc_bit=16, a_bit=8, i_bit=8, o_bit=8, r_bit=8, b_bit=8,
                 no_brevitas = True
     ):
         super(LOB_LSTM, self).__init__()
@@ -111,15 +111,16 @@ class LOB_LSTM(nn.Module):
         if quant:
             self.rnn = QuantLSTM(
                 input_size, hidden_size, num_layers, batch_first=True,
-                weight_quant = weight_quantizer['int{}'.format(w_bit)],
-                io_quant = act_quantizer['int{}'.format(o_bit)],
-                sigmoid_quant = act_quantizer['uint{}'.format(a_bit)],
-                tanh_quant = act_quantizer['int{}'.format(a_bit)],
-                cell_state_quant = act_quantizer['int{}'.format(r_bit)],
-                gate_acc_quant = act_quantizer['int{}'.format(acc_bit)]
+                weight_quant = weight_quantizer[f'{quant_type}{w_bit}'],
+                io_quant = act_quantizer[f'{quant_type}{o_bit}'],
+                sigmoid_quant = act_quantizer[f'u{quant_type}{a_bit}'],
+                tanh_quant = act_quantizer[f'{quant_type}{a_bit}'],
+                cell_state_quant = act_quantizer[f'{quant_type}{r_bit}'],
+                gate_acc_quant = act_quantizer[f'{quant_type}{acc_bit}'],
+                bias_quant = bias_quantizer[f'int{b_bit}']
             )
             self.fc = QuantLinear(hidden_size, output_size, 
-                                weight_quant=weight_quantizer['int{}'.format(w_bit)]
+                                weight_quant=weight_quantizer['int8']
                                 )
 
         else:
@@ -149,14 +150,15 @@ class LOB_LSTM(nn.Module):
         return out
 
 def lob_model(model_name, 
-              quant=False, 
-              w_bit=8, acc_bit=16, a_bit=8, i_bit=8, o_bit=8, r_bit=8, 
+              quant=False, quant_type='int',
+              w_bit=8, acc_bit=16, a_bit=8, i_bit=8, o_bit=8, r_bit=8, b_bit=8,
               no_brevitas=False):
     if model_name == 'deeplob':
         return deeplob(3)
     elif model_name == 'lob_lstm':
         return LOB_LSTM(40, 64, 1, 3, 
-                        quant, w_bit, acc_bit, a_bit, i_bit, o_bit, r_bit, 
+                        quant, quant_type, 
+                        w_bit, acc_bit, a_bit, i_bit, o_bit, r_bit, b_bit,
                         no_brevitas)
     else:
         raise ValueError('Model not found')

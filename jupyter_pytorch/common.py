@@ -32,7 +32,15 @@ from brevitas.quant.base import *
 
 from brevitas.quant.scaled_int import Int8WeightPerTensorFloat, \
     Int8ActPerTensorFloat, \
-    Uint8ActPerTensorFloat
+    Uint8ActPerTensorFloat, \
+    Int8Bias, \
+    Int16Bias, \
+    Int32Bias
+    
+
+from brevitas.quant.fixed_point import Int8WeightPerTensorFixedPoint, \
+    Int8ActPerTensorFixedPoint, \
+    Uint8ActPerTensorFixedPoint
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
@@ -95,9 +103,36 @@ class Uint4ActPerTensorFloat(Uint8ActPerTensorFloat):
 class Int16ActPerTensorFloat(Int8ActPerTensorFloat):
     bit_width=16
 
+class Int4WeightPerTensorFixedPoint(Int8WeightPerTensorFixedPoint):
+    bit_width=4
+
+class Int2WeightPerTensorFixedPoint(Int8WeightPerTensorFixedPoint):
+    bit_width=2
+
+class Int32ActPerTensorFixedPoint(Int8ActPerTensorFixedPoint):
+    bit_width=32
+
+class Int16ActPerTensorFixedPoint(Int8ActPerTensorFixedPoint):
+    bit_width=16
+
+class Int4ActPerTensorFixedPoint(Int8ActPerTensorFixedPoint):
+    bit_width=4
+
+class Int2ActPerTensorFixedPoint(Int8ActPerTensorFixedPoint):
+    bit_width=2
+
+class Uint4ActPerTensorFixedPoint(Uint8ActPerTensorFixedPoint):
+    bit_width=4
+
+class Uint2ActPerTensorFixedPoint(Uint8ActPerTensorFixedPoint):
+    bit_width=2
+
 weight_quantizer = {'int8': Int8WeightPerTensorFloat,
                     'int4': Int4WeightPerTensorFloat,
-                    'int2': Int2WeightPerTensorFloat}
+                    'int2': Int2WeightPerTensorFloat,
+                    'fxp8': Int8WeightPerTensorFixedPoint,
+                    'fxp4': Int4WeightPerTensorFixedPoint,
+                    'fxp2': Int2WeightPerTensorFixedPoint}
 
 act_quantizer = {
                 'int16': Int16ActPerTensorFloat,
@@ -106,4 +141,17 @@ act_quantizer = {
                 'int4': Int4ActPerTensorFloat,
                 'uint4': Uint4ActPerTensorFloat,
                 'int2': Int2ActPerTensorFloat,
-                'uint2': Uint2ActPerTensorFloat}
+                'uint2': Uint2ActPerTensorFloat,
+                'fxp32': Int32ActPerTensorFixedPoint,
+                'fxp16': Int16ActPerTensorFixedPoint,
+                'fxp8': Int8ActPerTensorFixedPoint,
+                'fxp4': Int4ActPerTensorFixedPoint,
+                'fxp2': Int2ActPerTensorFixedPoint,
+                'ufxp8': Uint8ActPerTensorFixedPoint,
+                'ufxp4': Uint4ActPerTensorFixedPoint,
+                'ufxp2': Uint2ActPerTensorFixedPoint
+                }
+
+bias_quantizer = {'int8': Int8Bias,
+                  'int16': Int16Bias,
+                  'int32': Int32Bias}
