@@ -5,7 +5,7 @@
 * the setting example
 
 ```
-exp_name: fxp_w4a8   # used to save model name
+exp_name: fxp_w4_acc16_a8_i16_o8_r8   # used to save model name
   
 learning_rate: 0.001
 epochs: 20
@@ -17,7 +17,7 @@ no_brevitas: False
 w_bit: 4      # bitwidth of weight
 acc_bit: 16   # bitwidth of accumulation
 a_bit: 8      # bitwidth of activation
-i_bit: 8      # bitwidth of input
+i_bit: 16     # bitwidth of input
 o_bit: 8      # bitwidth of output
 r_bit: 8      # bitwidth of recurrent memory
 ```
