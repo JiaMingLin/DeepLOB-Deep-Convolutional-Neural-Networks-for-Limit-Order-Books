@@ -25,13 +25,12 @@
   ```
   Epoch 20/20, Train Loss: 0.7507,           Validation Loss: 0.9749, Duration: 1:30:26.456265, Best Val Epoch: 14
   accuracy_score: 0.5995712892865336
-              precision    recall  f1-score   support
-                                                                                                                                                                                                                                        "mmwatstest04" 13:29 05-Sep-24
-           0     0.5688    0.6125    0.5898     47915
-           1     0.6211    0.6871    0.6524     48050
-           2     0.6123    0.4887    0.5436     43523
+                precision    recall  f1-score   support
+             0     0.5688    0.6125    0.5898     47915
+             1     0.6211    0.6871    0.6524     48050
+             2     0.6123    0.4887    0.5436     43523
 
-    accuracy                         0.5996    139488
-   macro avg     0.6007    0.5961    0.5953    139488
-weighted avg     0.6004    0.5996    0.5970    139488
+      accuracy                         0.5996    139488
+     macro avg     0.6007    0.5961    0.5953    139488
+  weighted avg     0.6004    0.5996    0.5970    139488
   ```
