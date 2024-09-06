@@ -1,8 +1,9 @@
-* run by
+# Run
 
   ```BREVITAS_JIT=1 python quantize_train.py --settings <YAML settings file name in ./exp_cases>```
 
-* the setting example
+# Results
+## fxp_w4_acc16_a8_i16_o8_r8
 
   ```
   exp_name: fxp_w4_acc16_a8_i16_o8_r8   # used to save model name
@@ -33,4 +34,20 @@
       accuracy                         0.5996    139488
      macro avg     0.6007    0.5961    0.5953    139488
   weighted avg     0.6004    0.5996    0.5970    139488
+  ```
+
+## fxp_w8_acc8_a8_i8_o8_r8
+
+  ```
+  Epoch 20/20, Train Loss: 0.6563,           Validation Loss: 0.8900, Duration: 0:59:16.238221, Best Val Epoch: 18
+  accuracy_score: 0.6302549323239275
+                precision    recall  f1-score   support
+
+             0     0.6248    0.6191    0.6220     47915
+             1     0.7392    0.5868    0.6543     48050
+             2     0.5579    0.6905    0.6171     43523
+
+      accuracy                         0.6303    139488
+     macro avg     0.6406    0.6321    0.6311    139488
+  weighted avg     0.6433    0.6303    0.6316    139488
   ```
