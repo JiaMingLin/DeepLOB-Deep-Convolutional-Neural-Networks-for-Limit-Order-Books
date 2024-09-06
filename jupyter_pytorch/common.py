@@ -37,10 +37,13 @@ from brevitas.quant.scaled_int import Int8WeightPerTensorFloat, \
     Int16Bias, \
     Int32Bias
     
-
 from brevitas.quant.fixed_point import Int8WeightPerTensorFixedPoint, \
     Int8ActPerTensorFixedPoint, \
     Uint8ActPerTensorFixedPoint
+
+from brevitas.quant.none import NoneWeightQuant, \
+    NoneActQuant, \
+    NoneBiasQuant
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)

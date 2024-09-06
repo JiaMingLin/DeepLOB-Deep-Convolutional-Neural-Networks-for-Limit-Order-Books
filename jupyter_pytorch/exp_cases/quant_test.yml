@@ -1,14 +1,15 @@
-exp_name: w8a8
+exp_name: fp32
 
-learning_rate: 0.001
-epochs: 10
+learning_rate: 0.0001
+epochs: 50
 
 #quantization
-quant: True
-no_brevitas: False
-w_bit: 8
+quant: False
+quant_type: fxp
+no_brevitas: True
+w_bit: 2
 acc_bit: 16
-a_bit: 8
-i_bit: 8
-o_bit: 8
-r_bit: 8
+a_bit: 4
+i_bit: 4
+o_bit: 4
+r_bit: 32
