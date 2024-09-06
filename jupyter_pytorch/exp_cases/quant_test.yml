@@ -3,6 +3,8 @@ exp_name: fp32
 learning_rate: 0.0001
 epochs: 50
 
+normalization: Zscore
+
 #quantization
 quant: False
 quant_type: fxp
