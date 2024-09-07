@@ -1,10 +1,11 @@
 from common import *
-from dataset import Dataset
 from model import deeplob
 from train_val import *
 from opts import parser
 from model import lob_model
 from brevitas import config
+from data.EMG.dataset import *
+from data.LOB.dataset import *
     
 # from sklearn.model_selection import train_test_split
 # X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.33)
@@ -17,36 +18,12 @@ def main(exp_setting):
     with open(os.path.join('exp_cases', exp_setting+'.yml'), 'r') as file:
         settings = yaml.safe_load(file)
 
-    batch_size = 64
-
+    dataset = settings['dataset']
     exp_name = settings['exp_name']
     learning_rate = settings['learning_rate']
     epochs = settings['epochs']
-    normalization = settings['normalization']
-    
-    dec_data = np.loadtxt(f'../data/NoAuction/NoAuction_{normalization}/NoAuction_{normalization}_Training/Train_Dst_NoAuction_{normalization}_CF_7.txt')
-    dec_train = dec_data[:, :int(np.floor(dec_data.shape[1] * 0.8))]
-    dec_val = dec_data[:, int(np.floor(dec_data.shape[1] * 0.8)):]
 
-    dec_test1 = np.loadtxt(f'../data/NoAuction/NoAuction_{normalization}/NoAuction_{normalization}_Testing/Test_Dst_NoAuction_{normalization}_CF_7.txt')
-    dec_test2 = np.loadtxt(f'../data/NoAuction/NoAuction_{normalization}/NoAuction_{normalization}_Testing/Test_Dst_NoAuction_{normalization}_CF_8.txt')
-    dec_test3 = np.loadtxt(f'../data/NoAuction/NoAuction_{normalization}/NoAuction_{normalization}_Testing/Test_Dst_NoAuction_{normalization}_CF_9.txt')
-    dec_test = np.hstack((dec_test1, dec_test2, dec_test3))
-    # dec_test = dec_test[:, :int(np.floor(dec_test.shape[1] * 0.01))]
-    print(dec_train.shape, dec_val.shape, dec_test.shape)
-
-    dataset_train = Dataset(data=dec_train, k=4, num_classes=3, T=100)
-    dataset_val = Dataset(data=dec_val, k=4, num_classes=3, T=100)
-    dataset_test = Dataset(data=dec_test, k=4, num_classes=3, T=100)
-
-    train_loader = torch.utils.data.DataLoader(dataset=dataset_train, batch_size=batch_size, shuffle=True, num_workers=12)
-    val_loader = torch.utils.data.DataLoader(dataset=dataset_val, batch_size=batch_size, shuffle=False, num_workers=12)
-    test_loader = torch.utils.data.DataLoader(dataset=dataset_test, batch_size=batch_size, shuffle=False, num_workers=12)
-
-    print(dataset_train.x.shape, dataset_train.y.shape)
-
-    tmp_loader = torch.utils.data.DataLoader(dataset=dataset_train, batch_size=1, shuffle=True)
-
+    num_layers = settings['num_layers']
     # quantization
     quant = settings['quant']
     quant_type = settings['quant_type']
@@ -60,6 +37,17 @@ def main(exp_setting):
     r_bit = settings['r_bit']
     no_brevitas = settings['no_brevitas']
 
+    feature_num = 40
+    output_size=3
+    hidden_size = 64
+    if dataset == 'LOB':
+        train_loader, val_loader, test_loader, tmp_loader = lob_dataset()
+    elif dataset == 'EMG':
+        feature_num = 8
+        output_size=8
+        hidden_size = 128
+        train_loader, val_loader, test_loader, tmp_loader = emg_dataset()
+
     for x, y in tmp_loader:
         print(x)
         print(y)
@@ -67,11 +55,13 @@ def main(exp_setting):
         break
 
     model = lob_model('lob_lstm', 
-                      quant = quant, quant_type=quant_type, w_bit = w_bit, acc_bit = acc_bit, i_bit = i_bit, 
+                      feature_num=feature_num, output_size=output_size, num_layers=num_layers, hidden_size = hidden_size,
+                      quant = quant, quant_type=quant_type, 
+                      w_bit = w_bit, acc_bit = acc_bit, a_bit = a_bit, i_bit = i_bit, 
                       o_bit = o_bit, r_bit = r_bit)
     model.to(device)
 
-    summary(model, (1, 1, 100, 40))
+    summary(model, (1, 1, 100, feature_num))
 
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)

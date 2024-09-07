@@ -1,17 +1,18 @@
 exp_name: fp32
+dataset: EMG
 
-learning_rate: 0.0001
+num_layers: 1
+
+learning_rate: 0.001
 epochs: 50
 
-normalization: Zscore
-
 #quantization
-quant: False
+quant: True
 quant_type: fxp
-no_brevitas: True
-w_bit: 2
-acc_bit: 16
+no_brevitas: False
+w_bit: 4
+acc_bit: 8
 a_bit: 4
 i_bit: 4
 o_bit: 4
-r_bit: 32
+r_bit: 8

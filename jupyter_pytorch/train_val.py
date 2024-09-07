@@ -42,7 +42,7 @@ def train(model, criterion, optimizer, train_loader, val_loader, exp_name, epoch
         if test_loss < best_test_loss:
             torch.save(model.state_dict(), f'./best_val_model_{exp_name}.pt')
             best_test_loss = test_loss
-            best_test_epoch = it
+            best_test_epoch = it+1
             print('model saved')
 
         dt = datetime.now() - t0
@@ -76,8 +76,13 @@ def test_model(model,criterion, test_loader):
 
     test_loss = np.mean(test_loss)
     all_targets = np.concatenate(all_targets)    
-    all_predictions = np.concatenate(all_predictions)   
-    print('accuracy_score:', accuracy_score(all_targets, all_predictions))
-    print(classification_report(all_targets, all_predictions, digits=4))
+    all_predictions = np.concatenate(all_predictions)
+    accuracy = accuracy_score(all_targets, all_predictions)
+    precision = precision_score(all_targets, all_predictions, average='macro')
+    recall = recall_score(all_targets, all_predictions, average='macro')
+    f1 = f1_score(all_targets, all_predictions, average='macro')
+    print(f'accuracy_score: {accuracy:.4f}, precision_score: {precision:.4f}, recall_score: {recall:.4f}, f1_score: {f1:.4f}')
+
+    # print(classification_report(all_targets, all_predictions, digits=4))
 
     return test_loss

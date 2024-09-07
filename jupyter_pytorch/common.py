@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime
 from tqdm import tqdm 
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, precision_score, recall_score, f1_score
 import yaml
 import torch
 import torch.nn.functional as F
