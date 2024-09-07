@@ -51,3 +51,18 @@
      macro avg     0.6406    0.6321    0.6311    139488
   weighted avg     0.6433    0.6303    0.6316    139488
   ```
+## fxp_w4_acc8_a8_i8_o8_r8(Zscore)
+
+  ```
+  Epoch 15/20, Train Loss: 0.5926,           Validation Loss: 0.8945, Duration: 0:16:22.321481, Best Val Epoch: 14
+  accuracy_score: 0.6382556205551732
+                precision    recall  f1-score   support
+
+             0     0.6473    0.6273    0.6371     47915
+             1     0.7332    0.5821    0.6489     48050
+             2     0.5646    0.7124    0.6300     43523
+
+      accuracy                         0.6383    139488
+     macro avg     0.6484    0.6406    0.6387    139488
+  weighted avg     0.6511    0.6383    0.6390    139488
+  ```
