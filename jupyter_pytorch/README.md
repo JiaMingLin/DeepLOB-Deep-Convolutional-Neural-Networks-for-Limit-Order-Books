@@ -51,7 +51,7 @@
      macro avg     0.6406    0.6321    0.6311    139488
   weighted avg     0.6433    0.6303    0.6316    139488
   ```
-## fxp_w4_acc8_a8_i8_o8_r8
+## fxp_w4_acc8_a8_i8_o8_r8(Zscore)
 
   ```
   Epoch 15/20, Train Loss: 0.5926,           Validation Loss: 0.8945, Duration: 0:16:22.321481, Best Val Epoch: 14
