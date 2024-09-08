@@ -43,7 +43,7 @@ def main(exp_setting):
     output_size=3
     hidden_size = 64
     if dataset == 'LOB':
-        train_loader, val_loader, test_loader, tmp_loader = lob_dataset()
+        train_loader, val_loader, test_loader, tmp_loader = lob_dataset(batch_size=256)
     elif dataset == 'EMG':
         feature_num = 8
         output_size=8

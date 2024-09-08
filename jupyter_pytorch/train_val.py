@@ -22,7 +22,7 @@ def train(model, criterion, optimizer, train_loader, val_loader, exp_name, write
         train_loss.backward()
         optimizer.step()
         
-        if it % step_size == 0:
+        if (it+1) % step_size == 0:
             print(f"\n\nIterations {it}/{total_length}, evaluating Models...")
             test_loss = test_model(model, criterion, val_loader, logging=True, writer = writer, it=it)
             writer.add_scalars('Train/Validation Loss', 
