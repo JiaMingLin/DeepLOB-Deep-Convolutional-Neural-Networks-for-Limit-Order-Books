@@ -1,10 +1,10 @@
 exp_name: fp32
-dataset: EMG
+dataset: LOB
 
 num_layers: 1
 
 learning_rate: 0.001
-epochs: 50
+epochs: 20
 
 #quantization
 quant: True
