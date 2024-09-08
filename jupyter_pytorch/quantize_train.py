@@ -76,7 +76,7 @@ def main(exp_setting):
           epochs=epochs)
 
     config.IGNORE_MISSING_KEYS = True
-    model.load_state_dict(torch.load(f'best_val_model_{exp_name}.pt'))
+    model.load_state_dict(torch.load(f'saved_models/best_val_model_{exp_name}.pt'))
     model.to(device)
 
     test_model(model, criterion, test_loader)
