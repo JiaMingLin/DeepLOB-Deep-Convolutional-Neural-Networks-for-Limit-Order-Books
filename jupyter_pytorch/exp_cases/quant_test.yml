@@ -10,9 +10,9 @@ epochs: 50
 quant: True
 quant_type: fxp
 no_brevitas: False
-w_bit: 4
+w_bit: 8
 acc_bit: 8
-a_bit: 4
-i_bit: 4
-o_bit: 4
+a_bit: 8
+i_bit: 8
+o_bit: 8
 r_bit: 8

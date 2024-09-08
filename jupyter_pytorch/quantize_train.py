@@ -3,9 +3,11 @@ from model import deeplob
 from train_val import *
 from opts import parser
 from model import lob_model
+from pathlib import Path
 from brevitas import config
 from data.EMG.dataset import *
 from data.LOB.dataset import *
+from torch.utils.tensorboard import SummaryWriter
     
 # from sklearn.model_selection import train_test_split
 # X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.33)
@@ -54,6 +56,9 @@ def main(exp_setting):
         print(x.shape, y.shape)
         break
 
+    writer = SummaryWriter(f'log/{exp_name}')
+    Path('saved_models').mkdir(parents=True, exist_ok=True)
+
     model = lob_model('lob_lstm', 
                       feature_num=feature_num, output_size=output_size, num_layers=num_layers, hidden_size = hidden_size,
                       quant = quant, quant_type=quant_type, 
@@ -66,8 +71,9 @@ def main(exp_setting):
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-    train_losses, val_losses = train(model, criterion, optimizer, 
-                                        train_loader, val_loader, exp_name, epochs=epochs)
+    train(model, criterion, optimizer, 
+          train_loader, val_loader, exp_name, writer,
+          epochs=epochs)
 
     config.IGNORE_MISSING_KEYS = True
     model.load_state_dict(torch.load(f'best_val_model_{exp_name}.pt'))

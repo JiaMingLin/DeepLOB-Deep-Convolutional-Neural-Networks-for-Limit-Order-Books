@@ -16,3 +16,5 @@ saved_model/
 exp_cases/*
 exp_cases/
 *.pt
+log/*
+log/
