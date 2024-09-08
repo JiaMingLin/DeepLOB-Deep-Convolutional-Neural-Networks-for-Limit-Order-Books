@@ -7,9 +7,9 @@ def train(model, criterion, optimizer, train_loader, val_loader, exp_name, write
     total_length = len(train_loader)*epochs
     record_points = 100
     step_size = int(total_length//record_points)
-
+    model.train()
     for it in tqdm(range(total_length)):
-        model.train()
+        
         inputs, targets = next(iter(train_loader))
         # move data to GPU
         inputs, targets = inputs.to(device, dtype=torch.float), targets.to(device, dtype=torch.int64)
@@ -22,7 +22,7 @@ def train(model, criterion, optimizer, train_loader, val_loader, exp_name, write
         train_loss.backward()
         optimizer.step()
         
-        if it % step_size == 0:
+        if (it+1) % step_size == 0:
             print(f"\n\nIterations {it}/{total_length}, evaluating Models...")
             test_loss = test_model(model, criterion, val_loader, logging=True, writer = writer, it=it)
             writer.add_scalars('Train/Validation Loss', 

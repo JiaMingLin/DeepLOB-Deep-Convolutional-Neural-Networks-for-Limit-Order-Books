@@ -43,7 +43,7 @@ def main(exp_setting):
     output_size=3
     hidden_size = 64
     if dataset == 'LOB':
-        train_loader, val_loader, test_loader, tmp_loader = lob_dataset()
+        train_loader, val_loader, test_loader, tmp_loader = lob_dataset(batch_size=256)
     elif dataset == 'EMG':
         feature_num = 8
         output_size=8
@@ -76,7 +76,7 @@ def main(exp_setting):
           epochs=epochs)
 
     config.IGNORE_MISSING_KEYS = True
-    model.load_state_dict(torch.load(f'best_val_model_{exp_name}.pt'))
+    model.load_state_dict(torch.load(f'saved_models/best_val_model_{exp_name}.pt'))
     model.to(device)
 
     test_model(model, criterion, test_loader)

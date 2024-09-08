@@ -7,9 +7,9 @@ learning_rate: 0.001
 epochs: 50
 
 #quantization
-quant: True
+quant: False
 quant_type: fxp
-no_brevitas: False
+no_brevitas: True
 w_bit: 8
 acc_bit: 8
 a_bit: 8
