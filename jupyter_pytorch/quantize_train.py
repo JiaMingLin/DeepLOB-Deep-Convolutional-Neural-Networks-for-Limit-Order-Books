@@ -26,6 +26,8 @@ def main(exp_setting):
     epochs = settings['epochs']
 
     num_layers = settings['num_layers']
+    hidden_size = settings['hidden_size']
+
     # quantization
     quant = settings['quant']
     quant_type = settings['quant_type']
@@ -41,8 +43,9 @@ def main(exp_setting):
 
     feature_num = 40
     output_size=3
-    hidden_size = 64
+    
     if dataset == 'LOB':
+        hidden_size = hidden_size
         train_loader, val_loader, test_loader, tmp_loader = lob_dataset(batch_size=256)
     elif dataset == 'EMG':
         feature_num = 8
