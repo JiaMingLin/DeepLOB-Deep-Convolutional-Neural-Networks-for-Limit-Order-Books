@@ -5,11 +5,13 @@
 .DS_Store
 .DS_Store
 .DS_Store
-data/*
-data/
+*.txt
+*.npy
 *.pyc
 report/
 report/*
+__pycache__/
+__pycache__/*
 *.txt
 saved_model/*
 saved_model/
